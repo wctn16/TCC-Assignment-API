@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
                 string.IsNullOrWhiteSpace(req.Password) ||
                 string.IsNullOrWhiteSpace(req.ConfirmPassword))
             {
-                return BadRequest(new { message = "Please fill in all fields" });
+                return BadRequest(new { message = "กรุณากรอกข้อมูลให้ครบถ้วน" });
             }
             var (success, message) = await _auth.RegisterAsync(
                 req.Username, req.Password, req.ConfirmPassword);
@@ -31,12 +31,12 @@ public class AuthController : ControllerBase
             {
                 return BadRequest(new { message });
             } else {
-                return Ok(new { message = "Registration successful" });
+                return Ok(new { message = "ลงทะเบียนสำเร็จ" });
             }
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred during registration", error = ex.Message });
+            return StatusCode(500, new { message = "เกิดข้อผิดพลาดระหว่างการลงทะเบียน", error = ex.Message });
         }
 
     }
@@ -49,20 +49,20 @@ public class AuthController : ControllerBase
             if (string.IsNullOrWhiteSpace(req.Username) ||
                 string.IsNullOrWhiteSpace(req.Password))
             {
-                return BadRequest(new { message = "Please fill in all fields" });
+                return BadRequest(new { message = "กรุณากรอกข้อมูลให้ครบถ้วน" });
             }
 
             var (success, token, username) = await _auth.LoginAsync(req.Username, req.Password);
 
             if (!success) {
-                return Unauthorized(new { message = "Username or Password is incorrect" });
+                return Unauthorized(new { message = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
             } else {
                 return Ok(new { token, username });
             }
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
+            return StatusCode(500, new { message = "เกิดข้อผิดพลาดระหว่างการเข้าสู่ระบบ", error = ex.Message });
         }
     }
 }
