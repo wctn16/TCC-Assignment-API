@@ -19,11 +19,11 @@ public class AuthService
         string username, string password, string confirmPassword)
     {
         if (password != confirmPassword)
-            return (false, "รหัสผ่านไม่ตรงกัน");
+            return (false, "Password and Confirm Password do not match");
 
         var exists = await _db.Users.AnyAsync(u => u.Username == username);
         if (exists)
-            return (false, "ชื่อผู้ใช้นี้ถูกใช้งานแล้ว");
+            return (false, "This username is already taken");
 
         var user = new User
         {
@@ -34,7 +34,7 @@ public class AuthService
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
 
-        return (true, "สมัครสมาชิกสำเร็จ");
+        return (true, "Registration successful");
     }
 
     public async Task<(bool Success, string Token, string Username)> LoginAsync(
